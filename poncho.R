@@ -2,6 +2,7 @@
 #Function to plot histograms of species distributions along environmental gradients 
 #CSDambros November-03-2012 (latest version)
 #Version 3.2
+#Changed in Terminal for Git
 
 #################################
 #Use: Poncho (table,gradient=NULL,col=1,col.places=2,col.species=3,
