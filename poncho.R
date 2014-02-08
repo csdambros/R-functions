@@ -2,11 +2,10 @@
 #Function to plot histograms of species distributions along environmental gradients 
 #CSDambros November-03-2012 (latest version)
 #Version 3.2
-#Changed in Terminal for Git 3
 
 #################################
 #Use: Poncho (table,gradient=NULL,col=1,col.places=2,col.species=3,
-#  	col.gradient="gray",highlight.species=NA,highlight.places=NA,
+#		col.gradient="gray",highlight.species=NA,highlight.places=NA,
 #		xyratio=1.3333333333,cex.species=NULL,lwd=1,
 #		cex.lab=NULL,cex.title=3,cex.gradient=2,
 #		file=NULL,title=NULL,xlab="Ordered places",
