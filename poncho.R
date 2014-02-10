@@ -19,7 +19,7 @@
 
 #Parameters:
 
-	# table			a numeric matrix, data frame or object containing objects in rows and atributes in columns.
+# table			a numeric matrix, data frame or object containing objects in rows and atributes in columns.
 	# gradient			an optional vector containing a atribute to order the table
 	# col				the initial color(s) to fill or shade the rectangle(s) with. The default 1 means "black"
 	# col.places		the color to fill or shade the species rectangles with. Only changes if highlight.species is not NULL

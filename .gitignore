@@ -1,0 +1,10 @@
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Rproj
+*/
+*.jpg
+*.png
+*.pdf
+*.eps
+*.gif
