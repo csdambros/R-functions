@@ -39,9 +39,6 @@ for(i in 1:nrow(IPs)){
 }
 
 
-
-gsub("asd","","asdfg")
-
 # USE
 #passSSHid(passwd = "XXX")
 
