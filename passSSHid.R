@@ -2,37 +2,40 @@
 # Grants passwordless access within local network
 # Required to spawn MPI processes across nodes
 
-passSSHid<-function(passwd,IPfile="/etc/openmpi/openmpi-default-hostfile"){
+passSSHid<-function(passwd=NULL,IPfile="/etc/openmpi/openmpi-default-hostfile"){
+
+if(is.null(passwd)){passwd <-.rs.askForPassword("Digite sua senha/Type your password")}
 
 # Create .ssh directory if it does not exist
-system("mkdir ~/.ssh")
-  
+
+system("mkdir ~/.ssh",ignore.stdout = TRUE,ignore.stderr = TRUE)
+
 # Change folder permissions (only owner can access)
-system("chmod -R 700 ~/.ssh")
+system("chmod -R 700 ~/.ssh",ignore.stdout = TRUE)
   
 # Generate ssh key
-system('ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""')
+system('ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""',ignore.stdout = TRUE)
 
 # Remove any known hosts if they exist
-system("rm ~/.ssh/known_hosts")
+system("rm ~/.ssh/known_hosts",ignore.stdout = TRUE)
 
 # Read file with host IPs
-IPs<-read.csv(IPfile)
+IPs<-read.csv(IPfile,header = FALSE)
 
 # 
 for(i in 1:nrow(IPs)){
 
   IPo<-sub(":.*","",IPs[i,1])
   #Skip if IP has a hashtag
-  if(regexpr("#",IPs[i,1])[1]==1){cat('skipping',IPo,"\n");next}
+  if(regexpr("#",IPs[i,1])[1]==1){cat('skipping Slave ',i,"\n");next}
 
   # create code to be passed
   code<-paste0('sshpass -p "',passwd,'" ssh-copy-id -f ',IPo)
 
   # copy ssh id to all computers
-  system(code)
+  system(code,ignore.stdout = TRUE,ignore.stderr = TRUE)
 
-  cat('IP',as.character(IPo),'done',"\n")
+  cat('Slave',i,' authorized',"\n")
 
 }
 
