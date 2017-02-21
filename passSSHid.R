@@ -22,21 +22,25 @@ IPs<-read.csv(IPfile)
 # 
 for(i in 1:nrow(IPs)){
 
+  IPo<-sub(":.*","",IPs[i,1])
   #Skip if IP has a hashtag
-  if(regexpr("#",IPs[i,1])[1]==1){cat('skipping',as.character(IPs[i,1]),"\n");next}
+  if(regexpr("#",IPs[i,1])[1]==1){cat('skipping',IPo,"\n");next}
 
   # create code to be passed
-  code<-paste0('sshpass -p "',passwd,'" ssh-copy-id -f ',IPs[i,1])
+  code<-paste0('sshpass -p "',passwd,'" ssh-copy-id -f ',IPo)
 
   # copy ssh id to all computers
   system(code)
 
-  cat('IP',as.character(IPs[i,1]),'done',"\n")
+  cat('IP',as.character(IPo),'done',"\n")
 
 }
 
 }
 
+
+
+gsub("asd","","asdfg")
 
 # USE
 #passSSHid(passwd = "XXX")
