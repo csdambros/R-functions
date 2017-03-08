@@ -47,12 +47,12 @@ poncho<-function(x,env=gradient,col=col.places,border="grey",col.gradient="grey"
   
   z<-z[order(env),order(colSums(x*env)/colSums(x))]
   
-  if(!is.null(sp.gradient)){
-    
-    z<-(x>0)*as.integer(col)
-    z<-z[order(env),order(sp.gradient)]
-    
-  }
+#  if(!is.null(sp.gradient)){
+#    
+#    z<-(x>0)*as.integer(col)
+#    z<-z[order(env),order(sp.gradient)]
+#    
+#  }
   
   
   if(!is.null(phy)){
