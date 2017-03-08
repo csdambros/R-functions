@@ -43,27 +43,28 @@ poncho<-function(x,env=gradient,col=col.places,border="grey",col.gradient="grey"
   
   if(is.null(env)){env<-prcomp(x)$x[,1]}
   if(length(col)==ncol(x)){z<-(t(t(x>0)*as.integer(col)))}else{
-    z<-(x>0)*as.integer(col)}
+  z<-(x>0)*as.integer(col)}
   
   z<-z[order(env),order(colSums(x*env)/colSums(x))]
   
-#  if(!is.null(sp.gradient)){
-#    
-#    z<-(x>0)*as.integer(col)
-#    z<-z[order(env),order(sp.gradient)]
-#    
-#  }
+  if(!is.null(sp.gradient)){
+    
+    z<-(x>0)*as.integer(col)
+    z<-z[order(env),order(sp.gradient)]
+  
+  }
   
   
   if(!is.null(phy)){
-    
+
+    #					prephy<-cophenetic(phy)
+    #					phy<-di2multi(as.phylo(hclust(as.dist(prephy[match(colnames(z),colnames(prephy)),match(colnames(z),colnames(prephy))]))))
     
     phy<-rotateConstr(phy,colnames(z))
     
     z<-z[,match(phy$tip.label[phy$edge[,2][phy$edge[,2]<=length(phy$tip.label)]],colnames(z))];
     colnames(z)<-phy$tip.label[phy$edge[,2][phy$edge[,2]<=length(phy$tip.label)]]
   }
-  
   
   
   
@@ -132,6 +133,7 @@ poncho<-function(x,env=gradient,col=col.places,border="grey",col.gradient="grey"
   par(op)
   
 }
+
 
 # USE
 
