@@ -35,7 +35,7 @@
 #################################
 #Function
 
-poncho<-function(x,env=gradient,col=col.places,border="grey",col.gradient="grey",cex.species=0.5,cex.lab=2,cex.gradient=1,file=NULL,xlab="Ordered sites",ylab.top=ylab,ylab="Abundance",ylab.bottom=gradlab,lty.lines=3,decrease=FALSE,asis=FALSE,phy=NULL,symbol=1,lty=3,col.lty="darkgrey",col.places=1,col.species=1,gradlab="Environment",gradient=NULL){
+poncho<-function(x,env=gradient,col=col.places,border="grey",col.gradient="grey",cex.species=0.5,cex.lab=2,cex.gradient=1,file=NULL,xlab="Ordered sites",ylab.top=ylab,ylab="Abundance",ylab.bottom=gradlab,lty.lines=3,decrease=FALSE,asis=FALSE,phy=NULL,symbol=1,lty=3,col.lty="darkgrey",col.places=1,col.species=1,gradlab="Environment",gradient=NULL,sp.gradient=NULL){
   
   symbol<-((symbol-1)%%2)+1
   col.orig<-col
