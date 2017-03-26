@@ -42,7 +42,7 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
     if(is.null(env)){env<-prcomp(x)$x[,1]}
     if(length(col)==ncol(x)){
       #xcol<-(t(t(x>0)*as.integer(col)))
-      xcol<-matrix(rep(col,each=nrow(presMat)),nrow=nrow(presMat))
+      xcol<-matrix(rep(col,each=nrow(x)),nrow=nrow(x))
       
       # (t(t(x>0)*as.integer(col)))
       
