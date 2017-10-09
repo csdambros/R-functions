@@ -2,6 +2,7 @@
 
 cat("Caro aluno de Ecologia Geral,\n\nVocê acaba de instalar um conjunto de funções\ndesenvolvidas especialmente para sua aula prática.\nEstas funções lhe ajudarão a determinar com precisão a\ncobertura de fungos ou bactérias presentes na sua\namostra.\n\nTenha uma boa aula!\nProf. Cristian")
 
+require(rgdal)
 
 plight<-function(file,thresh=0.5,showRGB=FALSE){
   
