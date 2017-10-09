@@ -118,7 +118,7 @@ pblue<-function(file,thresh=0.5,showRGB=FALSE){
 
 rasterGrid<-function(file,nx=20,ny=20,cex=0.3){
 
-im1<-stack("../Aula10.MoldenBread/CristianDambros2.jpg")
+im1<-stack("file")
 extent(im1)<-c(0,100,0,100)
 plotRGB(im1)
 #grid(20,20,col = 1)
