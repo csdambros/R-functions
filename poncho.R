@@ -1,5 +1,4 @@
-
-poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.species=0.5,cex.lab=2,cex.gradient=1,file=NULL,xlab="Ordered sites",ylab.top="Abundance",ylab.bottom="Environment",lty.lines=3,decrease=FALSE,phy=NULL,symbol=1,lty=3,col.lty="darkgrey",sp.gradient=NULL,gradient=NULL){
+poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.species=0.5,cex.lab=2,cex.gradient=1,file=NULL,xlab="Ordered sites",ylab.top="Abundance",ylab.bottom="Environment",lty.lines=3,decrease=FALSE,phy=NULL,symbol=1,lty=3,col.lty="darkgrey",sp.gradient=NULL,gradient=NULL,site.names=FALSE){
   
   symbol<-((symbol-1)%%2)+1
   
@@ -17,7 +16,7 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
     xcol<-matrix(col,nrow(x),ncol(x))
     
     print(dim(xcol))
-    }
+  }
   
   if(!is.null(sp.gradient)){
     
@@ -56,8 +55,14 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
   # Plot the figure
   
   op<-par(no.readonly=T)
+  if(site.names){
+  par(mar=c(0,0,0,0),oma=c(4,0,0,0),xpd=NA)
+  }
+  if(!site.names){
+    par(mar=c(0,0,0,0),oma=c(0,0,0,0),xpd=NA)
+  }
   
-  par(mar=c(0,0,0,0),oma=c(0,0,0,0),xpd=NA)
+  
   layout(matrix(c(1,1,1,1,2),5,1))
   
   xlim=c(0,1)
@@ -99,8 +104,16 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
   gradient2<-gradient/abs(max(c(gradient,0))-min(c(gradient,0)))
   val=-min(c(gradient2,0))
   
-  segments(c(.085,.085,.085,.1,.1,.8,.1),c(0,0,1,-.05,-.05,-.05,val),c(.075,.085,.075,.8,.1,.8,.8),c(0,1,1,-.05,-.1,-.1,val))
+  segments(c(.085,.085,.085,.1),c(0,0,1,val),c(.075,.085,.075,.8),c(0,1,1,val))
   
+  if(site.names){
+    axis(1,seq(.1,0.8-space.x,length=nrow(x))+space.x/2,labels = rownames(x),las=2,pos = -.05,cex.axis=cex.gradient)
+  }
+  
+  if(!site.names){
+  segments(c(.1,.1,.8),c(-.05,-.05,-.05),c(.8,.1,.8),c(-.05,-.1,-.1))}
+
+
   rect(seq(.1,0.8-space.x,length=nrow(x)),val,seq(.1,.8-space.x,length=nrow(x))+space.x,val+gradient2,col=col.gradient)
   
   text(.065,c(0,1),c(floor(min(gradient)),ceiling(max(gradient))),adj=1,cex=.8)
