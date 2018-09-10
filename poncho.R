@@ -56,7 +56,7 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
   
   op<-par(no.readonly=T)
   if(site.names){
-  par(mar=c(0,0,0,0),oma=c(4,0,0,0),xpd=NA)
+    par(mar=c(0,0,0,0),oma=c(4,0,0,0),xpd=NA)
   }
   if(!site.names){
     par(mar=c(0,0,0,0),oma=c(0,0,0,0),xpd=NA)
@@ -111,12 +111,12 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
   }
   
   if(!site.names){
-  segments(c(.1,.1,.8),c(-.05,-.05,-.05),c(.8,.1,.8),c(-.05,-.1,-.1))}
-
-
+    segments(c(.1,.1,.8),c(-.05,-.05,-.05),c(.8,.1,.8),c(-.05,-.1,-.1))}
+  
+  
   rect(seq(.1,0.8-space.x,length=nrow(x)),val,seq(.1,.8-space.x,length=nrow(x))+space.x,val+gradient2,col=col.gradient)
   
-  text(.065,c(0,1),c(floor(min(gradient)),ceiling(max(gradient))),adj=1,cex=.8)
+  text(.065,c(0,1),c(floor(min(gradient,0)),ceiling(max(gradient,0))),adj=1,cex=.8)
   text(.8-(.8-.1)/2,-.35,xlab,cex=2)
   text(.01,0.5,ylab.bottom,srt=90)
   
