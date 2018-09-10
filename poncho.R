@@ -1,4 +1,4 @@
-poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.species=0.5,cex.lab=2,cex.gradient=1,file=NULL,xlab="Ordered sites",ylab.top="Abundance",ylab.bottom="Environment",lty.lines=3,decrease=FALSE,phy=NULL,symbol=1,lty=3,col.lty="darkgrey",sp.gradient=NULL,gradient=NULL,site.names=FALSE){
+poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.species=0.5,cex.lab=2,cex.gradient=1,file=NULL,xlab="Ordered sites",ylab.top="Abundance",ylab.bottom="Environment",lty.lines=3,decrease=FALSE,phy=NULL,symbol=1,lty=3,col.lty="darkgrey",sp.gradient=NULL,gradient=NULL,site.names=FALSE,border=1){
   
   symbol<-((symbol-1)%%2)+1
   
@@ -86,7 +86,7 @@ poncho<-function(x,env=gradient,col=x>0,xborder="grey",col.gradient="grey",cex.s
   segments(c(0,.09,.09),c(-.02,-0.01,-0.01),c(.82,.82,.09),c(-.02,-.01,1),lty=c(3,1,1))
   text(.02,0.5,ylab.top,srt=90,cex=2)
   
-  if(symbol==1){rect(x1[x>0],y1[x>0],x1[x>0]+space.x,y1[x>0]+space.y*(x/max(x))[x>0],col=xcol[x>0],border = 1)}
+  if(symbol==1){rect(x1[x>0],y1[x>0],x1[x>0]+space.x,y1[x>0]+space.y*(x/max(x))[x>0],col=xcol[x>0],border = border)}
   #  if(symbol==1){rect(x1,y1,x1+space.x,y1+space.y,col=xcol,border = 1)}
   
   if(symbol==2){points(x1[x>0]+space.x/2,y1[x>0]+space.y/2,pch=21,col=border,bg=xcol[x>0])}
