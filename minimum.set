@@ -1,0 +1,33 @@
+minimum.set <- function(tabelaSpp, area = NULL) {
+  
+  tabelaSpp <- ifelse(tabelaSpp == 0, 0, 1)
+  if (is.null(area)) {
+    area <- rep(1, nrow(tabelaSpp))
+    }
+  
+  rich <- rowSums(tabelaSpp)
+  
+  rownames <- (1:(nrow(tabelaSpp) + 1))
+  select <- nrow(tabelaSpp) + 1
+  rownames2 <- rownames
+  tabelaSpp2 <- tabelaSpp
+  area2 <- area
+  rich2 <- rich
+  
+  select <- nrow(tabelaSpp) + 1
+  
+  for (i in 1:(nrow(tabelaSpp) - 1)) {
+    
+    select[i] <- rownames2[order(-rowSums(cbind(tabelaSpp2)), -rich2, -area2)][1]
+    
+    rownames2 <- rownames[-select]
+    tabelaSpp2 <- tabelaSpp[-select, (colSums(tabelaSpp[c(select, select), ]) == 0)]
+    area2 <- area[-select]
+    rich2 <- rich[-select]
+    }
+  
+  select[nrow(tabelaSpp)] <- rownames2[1]
+  
+  return(tabelaSpp[select, ])
+  
+}
