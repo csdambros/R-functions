@@ -1,8 +1,8 @@
 
 
-cat("Caro aluno de Ecologia Geral,\n\nVocê acaba de instalar um conjunto de funções\ndesenvolvidas especialmente para sua aula prática.\nEstas funções lhe ajudarão a determinar com precisão a\ncobertura de fungos ou bactérias presentes na sua\namostra.\n\nTenha uma boa aula!\nProf. Cristian")
+cat("Caro aluno de Ecologia Geral,\n\nVoce acaba de instalar um conjunto de funcoes desenvolvidas especialmente para sua aula pratica.\nEstas funcoes lhe ajudarao a determinar com precisao a\ncobertura de fungos ou bacterias presentes na sua\namostra.\n\nTenha uma boa aula!\nProf. Cristian")
 
-require(rgdal)
+#require(rgdal)
 
 plight<-function(file,thresh=0.5,showRGB=FALSE){
   
@@ -119,6 +119,7 @@ pblue<-function(file,thresh=0.5,showRGB=FALSE){
 
 rasterGrid<-function(file,nx=20,ny=20,cex=0.3){
 
+  require(raster)
 
 im1<-stack(file)
 
