@@ -123,12 +123,16 @@ rasterGrid<-function(file,nx=20,ny=20,cex=0.3){
 
 im1<-stack(file)
 
+op<-par(no.readonly = TRUE) 
+  
 extent(im1)<-c(0,100,0,100)
 plotRGB(im1)
 #grid(20,20,col = 1)
 abline(v=seq(0,100,length.out = nx+1),lty=3)
 abline(h=seq(0,100,length.out = ny+1),lty=3)
 text(seq(2.5,100-2.5,length.out = nx),rep(seq(2.5,100-2.5,length.out = ny),each=nx),1:(nx*ny),cex=cex)
+  
+par(op)  
 }
 
 
