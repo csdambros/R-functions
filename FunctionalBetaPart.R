@@ -333,6 +333,20 @@ functional.beta.pair5<-function (x, traits, index.family = "sorensen",prefix=NUL
 }
 
 
+functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=NULL,ncores=NULL,parallel=FALSE,useMPI=FALSE,parallel.breaks=NULL) 
+{
+  
+  x<-cbind(x,x)
+  n<-ncol(x)
+  traits<-cbind(traits,0)
+  traits<-rbind(traits,traits)
+  traits[1:x,ncol(traits)]<-1
+  resu<-functional.beta.pair5(x, traits, index.family,prefix,ncores,parallel ,useMPI,parallel.breaks)
+  return(resu)
+}
+  
+
+
 #' fspacepoly
 #'
 #' @description draw polygons showing funcitonal space for 2d traits
