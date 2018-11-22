@@ -340,7 +340,7 @@ functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=
   n<-ncol(x)
   traits<-cbind(traits,0)
   traits<-rbind(traits,traits)
-  traits[1:x,ncol(traits)]<-1
+  traits[1:n,ncol(traits)]<-1
   resu<-functional.beta.pair5(x, traits, index.family,prefix,ncores,parallel ,useMPI,parallel.breaks)
   return(resu)
 }
