@@ -333,13 +333,16 @@ functional.beta.pair5<-function (x, traits, index.family = "sorensen",prefix=NUL
 }
 
 
-functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=NULL,ncores=NULL,parallel=FALSE,useMPI=FALSE,parallel.breaks=NULL) 
-{
+functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=NULL,ncores=NULL,parallel=FALSE,useMPI=FALSE,parallel.breaks=NULL,constant=FALSE) {
   
   n<-ncol(x)
   x<-cbind(x,x)
+  if(constant){
+    traits<-traits+runif(traits,0,diff(range(traits/10000)))
+  }
   traits<-cbind(traits,0)
   traits<-rbind(traits,traits)
+  
   traits[1:n,ncol(traits)]<-1
   resu<-functional.beta.pair5(x, traits, index.family,prefix,ncores,parallel ,useMPI,parallel.breaks)
   return(resu)
