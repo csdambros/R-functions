@@ -380,16 +380,22 @@ fspacepoly<-function(comm,traits,new=TRUE){
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly3d<-function(comm,traits,new=TRUE){
+fspacepoly3d<-function(comm,traits,new=TRUE,alpha=0.5,bg="white",...){
   require(geometry)
   require(rgl)
-  
+  if(new){
+    rgl::clear3d()
+    bg3d(bg)
+  }
   for(i in 1:nrow(comm)){
     A<-traits[comm[i,]>0,]
     tr<-t(convhulln(A,options = "Tv"))
-    rgl.triangles(A[tr,1],A[tr,2],A[tr,3],col=i,alpha=0.5)
+    rgl.triangles(A[tr,1],A[tr,2],A[tr,3],col=i,alpha=alpha,...)
+    #particles3d(A[tr,1],A[tr,2],A[tr,3],col=i,...)
+    
   }
   
 }
+
 
 
