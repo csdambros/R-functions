@@ -344,7 +344,7 @@ functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=
   resu<-functional.beta.pair5(x, traits, index.family,prefix,ncores,parallel ,useMPI,parallel.breaks)
   return(resu)
 }
-  
+
 
 
 #' fspacepoly
@@ -353,7 +353,14 @@ functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly<-function(comm,traits){
+fspacepoly<-function(comm,traits,new=TRUE){
+  
+  if(new){
+    
+    plot(range(traits[,1]),range(traits[,2]),type="n", xlab=colnames(traits)[1],ylab=colnames(traits)[2])
+    
+  }
+  
   
   for(i in 1:nrow(comm)){
     A<-traits[comm[i,]>0,]
@@ -370,7 +377,7 @@ fspacepoly<-function(comm,traits){
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly3d<-function(comm,traits){
+fspacepoly3d<-function(comm,traits,new=TRUE){
   require(geometry)
   require(rgl)
   
