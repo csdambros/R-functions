@@ -465,7 +465,7 @@ axes3d('z++',at=seq(-tks[3],tks[3],length.out = 5),labels = seq(-1,1,length.out 
     }
 
     if(arrows){
-      texts3d(cors2[1,],cors2[2,],cors2[3,],colnames(traits),color="black",adj = 2)
+      texts3d(cors[1,],cors[2,],cors[3,],colnames(traits),color="black",adj = 2)
       
       for(i in 1:ncol(traits)){
       arrow3d(c(0,0,0),cors[,i],color="blue")
