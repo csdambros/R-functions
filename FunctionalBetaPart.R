@@ -1,11 +1,11 @@
 # Recreates the functional beta part function from the package betapart in R (Baselga et al. 2017) in order to run much faster.
 # The script also implements methods to plot communities in 2d and 3d functional spaces
-
+# Author: CSDambros
 
 #' full
 #' 
 #' @description Converts vector object into simetric distance matrix. Modified from the full function in the ecodist package (Goslee and Urban 2007)
-#' 
+#' @author Cristian Dambros 
 #' @param v Vector with distance values.
 #' @param names Names of objects from which distances were calculated (usually rownames in original matrix).
 #'
@@ -356,11 +356,12 @@ functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly<-function(comm,traits,new=TRUE){
+fspacepoly<-function(comm,traits,new=TRUE,alpha=0.5,bg="white",axes=TRUE,...){
   
   if(new){
     
-    plot(range(traits[,1]),range(traits[,2]),type="n", xlab=colnames(traits)[1],ylab=colnames(traits)[2])
+    plot(range(traits[,1]),range(traits[,2]),type="n", xlab=colnames(traits)[1],ylab=colnames(traits)[2],axes=axes)
+
     
   }
   
@@ -368,7 +369,7 @@ fspacepoly<-function(comm,traits,new=TRUE){
   for(i in 1:nrow(comm)){
     A<-traits[comm[i,]>0,]
     P<-A[chull(A),]
-    polygon(P,col=adjustcolor(i,0.2),border = adjustcolor(i,0.5))
+    polygon(P,col=adjustcolor(i,alpha),border = adjustcolor(i,0.5))
     text(colMeans(P)[1],colMeans(P)[2],rownames(comm)[i],col=i)
   }
   
@@ -380,7 +381,7 @@ fspacepoly<-function(comm,traits,new=TRUE){
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly3d<-function(comm,traits,new=TRUE,alpha=0.5,bg="white",...){
+fspacepoly3d<-function(comm,traits,new=TRUE,alpha=0.5,bg="white",axes=FALSE,...){
   require(geometry)
   require(rgl)
   if(new){
@@ -398,4 +399,119 @@ fspacepoly3d<-function(comm,traits,new=TRUE,alpha=0.5,bg="white",...){
 }
 
 
+#' fspacepoly3d
+#'
+#' @description draw polygons showing funcitonal space for 3d traits
+#' @param comm community matrix with species as columns and sites as rows
+#' @param traits functional trait data. Species are rows
+#'
+fspacepoly4d<-function(comm,traits,new=TRUE,alpha=0.5,bg="white",k=3,plot.species=FALSE,arrows=TRUE,axes=TRUE,...){
+  require(geometry)
+  require(rgl)
+  require(FD)
+  
+  if(k== 1){stop("Unidimensional not implemented")}
+  if(k>3){warning("k higher than 3 not allowed, reduced to 3");k=3}
+  cat("Calculating PCoA using",k,"dimensions\n")
+  gdist<-gowdis(traits)
+
+  pcoa<-cmdscale(gdist,k=k)
+  colnames(pcoa)<-paste("PCoA", 1:k)
+  cors<-(cor(pcoa,traits))*apply(abs(apply(pcoa,2,range))*1,2,min)
+
+  if(k == 2){
+
+    fspacepoly(comm,pcoa,axes = axes)
+    fspacepoly(comm,pcoa,new=new,alpha=alpha)
+    
+    if(arrows){
+    text(cors[1,]/2,cors[2,]/2,colnames(traits),pos = 2)
+    arrows(rep(0,ncol(traits)),rep(0,ncol(traits)),0.9*cors[1,],0.9*cors[2,],length = 0.1)
+    
+
+    if(axes){
+    
+    tks<-apply(abs(apply(pcoa,2,range))*0.9,2,min)
+    
+    axis(3,seq(-tks[1],tks[1],length.out = 5),labels = seq(-1,1,length.out = 5))
+    axis(4,seq(-tks[2],tks[2],length.out = 5),labels = seq(-1,1,length.out = 5))
+    }
+    
+    }
+    
+    if(plot.species){
+    points(pcoa[,1],pcoa[,2],pch=21,bg=1,cex=0.5)
+    text(pcoa[,1],pcoa[,2],cex=0.5,colnames(comm))
+    }
+    
+  }
+  
+  if(k>2){
+    
+    fspacepoly3d(comm,pcoa,new=TRUE)
+    fspacepoly3d(comm,pcoa,new=new,alpha=alpha)
+
+    if(axes){
+    
+  axes3d(c('x--', 'y--', 'z--'),color= "black") 
+    #axes3d(c('x--', 'y--', 'z--'),color= "blue") 
+
+tks<-apply(abs(apply(pcoa,2,range)),2,min)
+
+axes3d('x++',at=seq(-tks[1],tks[1],length.out = 5),labels = seq(-1,1,length.out = 5),color="blue")
+axes3d('y++',at=seq(-tks[2],tks[2],length.out = 5),labels = seq(-1,1,length.out = 5),color="blue")
+axes3d('z++',at=seq(-tks[3],tks[3],length.out = 5),labels = seq(-1,1,length.out = 5),color="blue")
+    title3d(xlab='PCoA 1',ylab='PCoA 2',zlab='PCoA 3',line = c(3,3,3),color="black")
+    }
+
+    if(arrows){
+      texts3d(cors2[1,],cors2[2,],cors2[3,],colnames(traits),color="black",adj = 2)
+      
+      for(i in 1:ncol(traits)){
+      arrow3d(c(0,0,0),cors[,i],color="blue")
+        
+      # segments3d(rbind(c(min(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
+      #                  c(min(pcoa[,1]),max(pcoa[,2]),cors[3,3]),
+      #                  c(max(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
+      #                  c(max(pcoa[,1]),max(pcoa[,2]),cors[3,3]),
+      #                  c(min(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
+      #                  c(max(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
+      #                  c(min(pcoa[,1]),max(pcoa[,2]),cors[3,3]),
+      #                  c(max(pcoa[,1]),max(pcoa[,2]),cors[3,3])
+      #                  ))
+      # 
+      # segments3d(rbind(c(min(pcoa[,1]),cors[2,3],min(pcoa[,3])),
+      #                  c(min(pcoa[,1]),cors[2,3],max(pcoa[,3])),
+      #                  c(max(pcoa[,1]),cors[2,3],min(pcoa[,3])),
+      #                  c(max(pcoa[,1]),cors[2,3],max(pcoa[,3])),
+      #                  c(min(pcoa[,1]),cors[2,3],min(pcoa[,3])),
+      #                  c(max(pcoa[,1]),cors[2,3],min(pcoa[,3])),
+      #                  c(min(pcoa[,1]),cors[2,3],max(pcoa[,3])),
+      #                  c(max(pcoa[,1]),cors[2,3],max(pcoa[,3]))
+      # ))
+      # 
+      # segments3d(rbind(c(cors[1,3],min(pcoa[,2]),min(pcoa[,3])),
+      #                  c(cors[1,3],min(pcoa[,2]),max(pcoa[,3])),
+      #                  c(cors[1,3],max(pcoa[,2]),min(pcoa[,3])),
+      #                  c(cors[1,3],max(pcoa[,2]),max(pcoa[,3])),
+      #                  c(cors[1,3],min(pcoa[,2]),min(pcoa[,3])),
+      #                  c(cors[1,3],max(pcoa[,2]),min(pcoa[,3])),
+      #                  c(cors[1,3],min(pcoa[,2]),max(pcoa[,3])),
+      #                  c(cors[1,3],max(pcoa[,2]),max(pcoa[,3]))
+      # ))
+      
+      
+        
+      }
+
+      }
+    
+    if(plot.species){
+      points3d(pcoa[,1],pcoa[,2],pcoa[,3],color="black")
+      text3d(pcoa[,1],pcoa[,2],pcoa[,3],colnames(comm))
+    }
+    
+  }
+  
+}
 
