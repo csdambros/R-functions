@@ -2,6 +2,9 @@
 # Carrega pacote para construção filogenética
 library(ape)
 
+# Caso não tenha o pacote instalado, execute o comando:
+# install.packages("ape")
+
 # Carrega função para fazer gráfico
 source("https://raw.githubusercontent.com/csdambros/R-functions/master/poncho.R")
 
