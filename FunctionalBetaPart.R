@@ -394,6 +394,7 @@ fspacepoly3d<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1
   if(new){
     rgl::clear3d()
     bg3d(bg)
+    plot3d(traits)
   }
   for(i in 1:nrow(comm)){
     A<-traits[comm[i,]>0,]
@@ -510,57 +511,57 @@ fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1
     
     if(axes){
       
-      axes3d(c('x--', 'y--', 'z--'),color= "black") 
+      #axes3d(c('x--', 'y--', 'z--'),color= "black",alpha=1) 
       #axes3d(c('x--', 'y--', 'z--'),color= "blue") 
       
-      tks<-apply(abs(apply(pcoa,2,range)),2,min)
+      redfactor<-0.8
       
-      axes3d('x++',at=seq(-tks[1],tks[1],length.out = 5),labels = seq(-1,1,length.out = 5),color="blue")
-      axes3d('y++',at=seq(-tks[2],tks[2],length.out = 5),labels = seq(-1,1,length.out = 5),color="blue")
-      axes3d('z++',at=seq(-tks[3],tks[3],length.out = 5),labels = seq(-1,1,length.out = 5),color="blue")
-      title3d(xlab='PCoA 1',ylab='PCoA 2',zlab='PCoA 3',line = c(3,3,3),color="black")
+      xaxis<-pcoa[,1]*redfactor
+      yaxis<-pcoa[,2]*redfactor
+      zaxis<-pcoa[,3]*redfactor
+      
+      xcor<-cors[,1]
+      ycor<-cors[,2]
+      zcor<-cors[,3]
+      
+      scalex<-diff(range(xaxis))/diff(range(xaxis,yaxis,zaxis))
+      scaley<-diff(range(yaxis))/diff(range(xaxis,yaxis,zaxis))
+      scalez<-diff(range(zaxis))/diff(range(xaxis,yaxis,zaxis))
+      
+      expand<-min(abs(c(min(xaxis)/xcor[xcor<0]/scalex,
+                        max(xaxis)/xcor[xcor>0]/scalex,
+                        min(yaxis)/ycor[ycor<0]/scaley,
+                        max(yaxis)/ycor[ycor>0]/scaley,
+                        min(zaxis)/zcor[zcor<0]/scalez,
+                        max(zaxis)/zcor[zcor>0]/scalez)))
+    
+      zaxesvals<-pretty(c(xcor,ycor,zcor),n = 3)
+      
+      atx<-zaxesvals*scalex*expand
+      aty<-zaxesvals*scaley*expand
+      atz<-zaxesvals*scalez*expand
+      
+            axes3d('x++',at=atx[atx>min(pcoa[,1])&atx<max(pcoa[,1])],labels = zaxesvals,color="blue",alpha=1)
+            axes3d('y++',at=aty[aty>min(pcoa[,2])&aty<max(pcoa[,2])],labels = zaxesvals,color="blue",alpha=1)
+            axes3d('z-+',at=atz[atz>min(pcoa[,3])&atz<max(pcoa[,3])],labels = zaxesvals,color="blue",alpha=1)
+
+#            title3d(xlab='PCoA 1',ylab='PCoA 2',zlab='PCoA 3',line = c(3,3,3),color="black",alpha=1)
     }
     
+
     if(arrows){
-      texts3d(cors[1,],cors[2,],cors[3,],colnames(traits),color="black",adj = 2)
+      texts3d(cors[,1]*scalex*expand*1.1,
+              cors[,2]*scaley*expand*1.1,
+              cors[,3]*scalez*expand*1.1,
+              colnames(traits),color="black",alpha=1)
       
       for(i in 1:ncol(traits)){
-        arrow3d(c(0,0,0),cors[,i],color="blue")
-        
-        # segments3d(rbind(c(min(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
-        #                  c(min(pcoa[,1]),max(pcoa[,2]),cors[3,3]),
-        #                  c(max(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
-        #                  c(max(pcoa[,1]),max(pcoa[,2]),cors[3,3]),
-        #                  c(min(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
-        #                  c(max(pcoa[,1]),min(pcoa[,2]),cors[3,3]),
-        #                  c(min(pcoa[,1]),max(pcoa[,2]),cors[3,3]),
-        #                  c(max(pcoa[,1]),max(pcoa[,2]),cors[3,3])
-        #                  ))
-        # 
-        # segments3d(rbind(c(min(pcoa[,1]),cors[2,3],min(pcoa[,3])),
-        #                  c(min(pcoa[,1]),cors[2,3],max(pcoa[,3])),
-        #                  c(max(pcoa[,1]),cors[2,3],min(pcoa[,3])),
-        #                  c(max(pcoa[,1]),cors[2,3],max(pcoa[,3])),
-        #                  c(min(pcoa[,1]),cors[2,3],min(pcoa[,3])),
-        #                  c(max(pcoa[,1]),cors[2,3],min(pcoa[,3])),
-        #                  c(min(pcoa[,1]),cors[2,3],max(pcoa[,3])),
-        #                  c(max(pcoa[,1]),cors[2,3],max(pcoa[,3]))
-        # ))
-        # 
-        # segments3d(rbind(c(cors[1,3],min(pcoa[,2]),min(pcoa[,3])),
-        #                  c(cors[1,3],min(pcoa[,2]),max(pcoa[,3])),
-        #                  c(cors[1,3],max(pcoa[,2]),min(pcoa[,3])),
-        #                  c(cors[1,3],max(pcoa[,2]),max(pcoa[,3])),
-        #                  c(cors[1,3],min(pcoa[,2]),min(pcoa[,3])),
-        #                  c(cors[1,3],max(pcoa[,2]),min(pcoa[,3])),
-        #                  c(cors[1,3],min(pcoa[,2]),max(pcoa[,3])),
-        #                  c(cors[1,3],max(pcoa[,2]),max(pcoa[,3]))
-        # ))
-        
-        
-        
+        arrow3d(c(0,0,0),cors[i,]*c(scalex,scaley,scalez)*expand,color="blue",alpha=1)
       }
       
+
+            arrow3d(c(0,0,0),cors[4,]*c(scalex,scaley,scalez)*expand,color="blue",alpha=1)
+
     }
     
     if(plot.species){
