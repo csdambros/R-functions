@@ -356,14 +356,14 @@ functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:10,border=1,...){
+fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:10,border=1,plot.sites=FALSE,...){
   
   col<-rep_len(col,nrow(comm))
   border<-rep_len(border,nrow(comm))
   
   if(new){
     
-    plot(range(traits[,1]),range(traits[,2]),type="n", xlab=colnames(traits)[1],ylab=colnames(traits)[2],axes=axes)
+    plot(range(traits[,1]),range(traits[,2]),type="n", xlab=colnames(traits)[1],ylab=colnames(traits)[2],axes=axes,...)
     
     
   }
@@ -373,7 +373,9 @@ fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:1
     A<-traits[comm[i,]>0,]
     P<-A[chull(A),]
     polygon(P,col=adjustcolor(col[i],alpha),border = adjustcolor(border[i],0.5))
+    if(plot.sites){
     text(colMeans(P)[1],colMeans(P)[2],rownames(comm)[i],col=border[i])
+    }
   }
   
 }
@@ -384,7 +386,7 @@ fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:1
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly3d<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:10,border=1,...){
+fspacepoly3d<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:10,border=1,plot.sites=FALSE,...){
   require(geometry)
   require(rgl)
   
@@ -400,6 +402,10 @@ fspacepoly3d<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1
     A<-traits[comm[i,]>0,]
     tr<-t(convhulln(A,options = "Tv"))
     rgl.triangles(A[tr,1],A[tr,2],A[tr,3],col=col[i],alpha=alpha,...)
+    if(plot.sites){
+      text3d(colMeans(A[tr,])[1],colMeans(A[tr,])[2],colMeans(A[tr,])[3],rownames(comm)[i],color=border[i])
+    }
+    
     #particles3d(A[tr,1],A[tr,2],A[tr,3],col=i,...)
     
   }
@@ -413,7 +419,7 @@ fspacepoly3d<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1:10,border=1,k=3,plot.species=FALSE,arrows=TRUE,axes=TRUE,...){
+fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1:10,border=1,k=3,plot.species=FALSE,plot.sites=FALSE,arrows=TRUE,axes=TRUE,...){
   require(geometry)
   require(rgl)
   require(FD)
@@ -441,8 +447,8 @@ fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1
 
   if(k == 2){
     
-    fspacepoly(comm,pcoa,axes = axes,col=col,border=border)
-    fspacepoly(comm,pcoa,new=new,alpha=alpha,col=col,border=border)
+    #fspacepoly(comm,pcoa,axes = axes,col=col,border=border,plot.sites=plot.sites)
+    fspacepoly(comm,pcoa,new=new,alpha=alpha,col=col,border=border,plot.sites=plot.sites)
     
     if(arrows){
       
@@ -506,8 +512,8 @@ fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1
   
   if(k>2){
     
-    fspacepoly3d(comm,pcoa,new=TRUE,col=col,border=border)
-    fspacepoly3d(comm,pcoa,new=new,alpha=alpha,col=col,border=border)
+    #fspacepoly3d(comm,pcoa,new=TRUE,col=col,border=border,plot.sites=plot.sites)
+    fspacepoly3d(comm,pcoa,new=new,alpha=alpha,col=col,border=border,plot.sites=plot.sites)
     
     if(axes){
       
