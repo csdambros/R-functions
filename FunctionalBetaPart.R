@@ -363,7 +363,7 @@ fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:1
   
   if(new){
     
-    plot(range(traits[,1]),range(traits[,2]),type="n", xlab=colnames(traits)[1],ylab=colnames(traits)[2],axes=axes,...)
+    plot(range(traits[,1]),range(traits[,2]),type="n", axes=axes,...)
     
     
   }
@@ -396,7 +396,7 @@ fspacepoly3d<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1
   if(new){
     rgl::clear3d()
     bg3d(bg)
-    plot3d(traits)
+    plot3d(traits,...)
   }
   for(i in 1:nrow(comm)){
     A<-traits[comm[i,]>0,]
@@ -448,7 +448,7 @@ fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1
   if(k == 2){
     
     #fspacepoly(comm,pcoa,axes = axes,col=col,border=border,plot.sites=plot.sites)
-    fspacepoly(comm,pcoa,new=new,alpha=alpha,col=col,border=border,plot.sites=plot.sites)
+    fspacepoly(comm,pcoa,new=new,alpha=alpha,col=col,border=border,plot.sites=plot.sites,...)
     
     if(arrows){
       
@@ -513,7 +513,7 @@ fspacepoly4d<-function(comm,traits,pcoa=NULL,new=TRUE,alpha=0.5,bg="white",col=1
   if(k>2){
     
     #fspacepoly3d(comm,pcoa,new=TRUE,col=col,border=border,plot.sites=plot.sites)
-    fspacepoly3d(comm,pcoa,new=new,alpha=alpha,col=col,border=border,plot.sites=plot.sites)
+    fspacepoly3d(comm,pcoa,new=new,alpha=alpha,col=col,border=border,plot.sites=plot.sites,...)
     
     if(axes){
       
