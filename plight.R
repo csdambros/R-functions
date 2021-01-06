@@ -136,6 +136,197 @@ par(op)
 }
 
 
+require(raster)
+
+model.train<-function(folder=".",pattern=".png|.jpg"){
+  require(raster)
+  require(tree)
+  
+#  folder="../Aula10.MoldenBread/VideoLapses/"
+#  extension=".png"
+  pics<-list.files(folder,pattern = pattern)
+  picsref<-list.files(folder,pattern = pattern,full.names = TRUE)
+  
+  cat(paste0("(",1:length(pics),") ",pics,"\n"))
+  
+  ref <- readline("Digite o número da foto de referência (treino):")
+  cat("Arquivo",pics[as.integer(ref)],"selecionado para treino (ensinar o R)\n")
+  
+  picture<-stack(picsref[as.integer(ref)])
+
+    {
+plotRGB(picture,maxpixels=10000)
+
+moldValues<-list()
+
+extmx<-{}
+extmy<-{}
+
+i=1
+
+
+stopmofo<-"S"
+
+while(stopmofo=="S"){
+
+cat("Selecione área com a primeira classe na foto")
+
+  x<-"S"
+
+  mold<-select(picture)
+  
+while(!x%in%c("S","N")){
+x <- toupper(readline("Manter seleção (S/N)?"))
+if(!x%in%c("S","N")){cat("Digite S para Sim ou N para Não")}
+}
+  if(x=="S"){
+  moldValues[[i]]<-getValues(mold)
+  i<-i+1
+  
+
+ext<-extent(mold)
+
+extmx<-cbind(extmx,ext[c(1,2)])
+extmy<-cbind(extmy,ext[c(3,4)])
+
+rect(extmx[1,],extmy[1,],extmx[2,],extmy[2,],col=2,density = 20)
+
+}
+
+stopmofo<-""
+
+while(!stopmofo%in%c("S","N")){
+  stopmofo <- toupper(readline("Você gostaria de identificar mais regiões com a primeira classe (S/N)?"))
+  if(!stopmofo%in%c("S","N")){cat("Digite S para Sim ou N para Não")}
+
+  }
+
+}
+
+###
+breadValues<-list()
+
+extbx<-{}
+extby<-{}
+
+stopmofo<-"S"
+
+while(stopmofo=="S"){
+  
+  cat("Selecione área com a segunda classe na foto")
+  bread<-select(picture)
+  
+  
+  x<-"S"
+  
+  while(!x%in%c("S","N")){
+    x <- toupper(readline("Manter seleção (S/N)?"))
+    if(!x%in%c("S","N")){cat("Digite S para Sim ou N para Não")}
+  }
+  
+  if(x=="S"){
+    breadValues[[i]]<-getValues(bread)
+    i<-i+1
+    
+  ext<-extent(bread)
+  
+  extbx<-cbind(extbx,ext[c(1,2)])
+  extby<-cbind(extby,ext[c(3,4)])
+  
+  rect(extbx[1,],extby[1,],extbx[2,],extby[2,],col=3,density = 20)
+  
+  }
+  
+  stopmofo<-""
+  
+  while(!stopmofo%in%c("S","N")){
+    stopmofo <- toupper(readline("Você gostaria de identificar mais regiões com a segunda classe (S/N)?"))
+    if(!stopmofo%in%c("S","N")){cat("Digite S para Sim ou N para Não")}
+    
+  }
+  
+}
+
+#####
+
+moldValues2<-do.call(rbind,moldValues)
+breadValues2<-do.call(rbind,breadValues)
+}
+
+cat("Construindo modelo...")
+
+resp<-rep(c("c1","c2"),c(nrow(moldValues2),nrow(breadValues2)))
+
+m1<-tree(resp~.,data=data.frame(resp,rbind(moldValues2,breadValues2)))
+
+cat("concluído\n")
+
+return(m1)
+
+}
+
+model.classify<-function(m1,
+                        folder=".",
+                        pattern=".png|.jpg",
+                        plot=FALSE){
+
+require(raster)
+require(tree)
+
+
+#  folder="../Aula10.MoldenBread/VideoLapses/"
+#  extension=".png"
+pics<-list.files(folder,pattern = pattern)
+picsref<-list.files(folder,pattern = pattern,full.names = TRUE)
+
+cat("Mensurando cobertura nas fotos\n")
+
+op<-par(no.readonly = TRUE)
+
+if(plot){
+  par(mfrow=c(length(pics),2))
+}
+
+resu<-matrix(NA,length(pics),5)
+rownames(resu)<-pics
+colnames(resu)<-c("npixels","c1","c2","c1.cover","c2.cover")
+
+
+for (i in 1:length(pics)){
+
+  picture<-stack(picsref[i])  
+  allpic<-getValues(picture)
+
+  colnames(allpic)<-labels(m1$terms)
+  
+  predicted<-predict(m1,newdata=data.frame(allpic))
+
+  n<-nrow(predicted)
+  c1<-sum(predicted[,"c1"]>=0.5)
+  c2<-sum(predicted[,"c2"]>0.5)
+
+  resu[i,]<-c(n,c1,c2,c1/n,c2/n)
+  print(i)
+  
+  if(plot){
+  
+  picturecopy<-raster(picture)
+  picturecopy<-setValues(picturecopy,predicted[,"c1"]>=0.5)
+
+  plotRGB(picture,maxpixels=10000)
+  plot(picturecopy,maxpixels=10000,axes=FALSE,box=FALSE)
+
+  }
+}
+ 
+  par(op)
+  return(resu)
+   
+}
+
+
+
+
 
 
 
