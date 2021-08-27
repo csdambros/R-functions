@@ -356,14 +356,18 @@ functional.beta.pair5uni<-function (x, traits, index.family = "sorensen",prefix=
 #' @param comm community matrix with species as columns and sites as rows
 #' @param traits functional trait data. Species are rows
 #'
-fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:10,border=1,plot.sites=FALSE,...){
+fspacepoly<-function(comm,traits,new=TRUE,axes=TRUE,bg="white",alpha=0.5,col=1:10,border=1,plot.sites=FALSE,xlab=NULL,ylab=NULL,...){
   
   col<-rep_len(col,nrow(comm))
   border<-rep_len(border,nrow(comm))
   
   if(new){
     
-    plot(range(traits[,1]),range(traits[,2]),type="n", axes=axes,...)
+    if(is.null(xlab)){xlab=colnames(traits)[1]}
+    if(is.null(ylab)){ylab=colnames(traits)[2]}
+    
+    
+    plot(range(traits[,1]),range(traits[,2]),type="n", axes=axes,xlab=xlab,ylab=ylab,...)
     
     
   }
