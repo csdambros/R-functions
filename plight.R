@@ -1,6 +1,6 @@
 
 
-cat("Caro aluno de Ecologia Geral,\n\nVoce acaba de instalar um conjunto de funcoes desenvolvidas especialmente para sua aula pratica.\nEstas funcoes lhe ajudarao a determinar com precisao a\ncobertura de fungos ou bacterias presentes na sua\namostra.\n\nTenha uma boa aula!\nProf. Cristian")
+cat("Caro aluno de Ecologia,\n\nVoce acaba de instalar um conjunto de funcoes desenvolvidas especialmente para sua aula pratica.\nEstas funcoes lhe ajudarao a determinar com precisao a\ncobertura de fungos ou bacterias presentes na sua\namostra.\n\nTenha uma boa aula!\nProf. Cristian")
 
 #require(rgdal)
 
