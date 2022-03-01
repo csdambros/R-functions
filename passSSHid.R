@@ -17,7 +17,7 @@ system("chmod -R 700 ~/.ssh",ignore.stdout = TRUE)
 system('ssh-keygen -t rsa -f ~/.ssh/id_rsa -q -P ""',ignore.stdout = TRUE)
 
 # Remove any known hosts if they exist
-system("rm ~/.ssh/known_hosts",ignore.stdout = TRUE)
+system("rm ~/.ssh/known_hosts",ignore.stdout = TRUE,ignore.stderr = TRUE)
 
 # Read file with host IPs
 IPs<-read.csv(IPfile,header = FALSE)
